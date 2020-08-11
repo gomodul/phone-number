@@ -67,6 +67,24 @@ func TestPhoneNumber_Provider_Three(t *testing.T) {
 	}
 }
 
+func TestPhoneNumber_Provider_SMARTFREN(t *testing.T) {
+	pn := PhoneNumber("088211122152")
+	result := pn.Provider()
+	fmt.Println(result)
+	if result != "SMARTFREN" {
+		t.Fatal("invalid value")
+	}
+}
+
+func TestPhoneNumber_Provider_TELKOM(t *testing.T) {
+	pn := PhoneNumber("0215386950")
+	result := pn.Provider()
+	fmt.Println(result)
+	if result != "TELKOM" {
+		t.Fatal("invalid value")
+	}
+}
+
 func TestPhoneNumber_Provider_Notfound(t *testing.T) {
 	pn := PhoneNumber("079520032657")
 	result := pn.Provider()

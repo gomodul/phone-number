@@ -19,7 +19,7 @@ func Provider(pn interface{}) string {
 func provider(pn string) string {
 	var result string
 
-	for i, iv := range operators {
+	for i, iv := range providers {
 		if reflect.TypeOf(iv).Kind() == reflect.Map {
 			for j, jv := range iv.(map[string]interface{}) {
 				result = check(j, jv, pn)
