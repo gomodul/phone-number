@@ -1,4 +1,4 @@
-package phone_number
+package phonenumber
 
 import (
 	"fmt"
@@ -6,29 +6,31 @@ import (
 	"regexp"
 )
 
+// PhoneNumber ...
 type PhoneNumber string
 
+// Provider ...
 func (pn PhoneNumber) Provider() string {
 	return provider(fmt.Sprint(pn))
 }
 
+// Provider ...
 func Provider(pn interface{}) string {
 	return provider(fmt.Sprint(pn))
 }
 
 func provider(pn string) string {
 	var result string
-
-	for i, iv := range providers {
-		if reflect.TypeOf(iv).Kind() == reflect.Map {
-			for j, jv := range iv.(map[string]interface{}) {
+	for _, iv := range providers {
+		if reflect.TypeOf(iv.Regex).Kind() == reflect.Map {
+			for j, jv := range iv.Regex.(map[string]interface{}) {
 				result = check(j, jv, pn)
 				if result != "" {
-					return fmt.Sprintf("%v %v", i, result)
+					return fmt.Sprintf("%v %v", iv.Name, result)
 				}
 			}
 		} else {
-			result = check(i, iv, pn)
+			result = check(iv.Name, iv.Regex, pn)
 			if result != "" {
 				return result
 			}
@@ -38,9 +40,9 @@ func provider(pn string) string {
 }
 
 func check(k, v, pn interface{}) string {
-	matched, _ := regexp.MatchString(fmt.Sprint(v), fmt.Sprint(pn))
-	if matched {
-		return fmt.Sprint(k)
+	matched, err := regexp.MatchString(fmt.Sprint(v), fmt.Sprint(pn))
+	if err != nil || !matched {
+		return ""
 	}
-	return ""
+	return fmt.Sprint(k)
 }
